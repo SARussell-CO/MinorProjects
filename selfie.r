@@ -45,3 +45,7 @@ ytop <- circ(r = r, x = xcoords, xcenter = xcenter) - 1
 ybot <- -1 * circ(r = r, x = xcoords, xcenter = xcenter) - 1
 polygon(x = c(xcoords, rev(xcoords)), y = c(ytop, ybot), col = "blue")
 
+# I want to set this up so that I can create an arbitrary amount of circles with specific coordinates,
+# radius and then be able to loop through the list and plot all the cirles. Sounds like fun!
+# 
+# I added this to test the RStudio integration with Git and GitHub
