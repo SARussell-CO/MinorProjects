@@ -3,7 +3,7 @@ rm(list = ls())
 
 # Thu Oct 06 20:14:59 2016 ------------------------------
 circ <- function(r, x, xcenter = 0, ycenter = 0){
-	# if ((x - xcenter)^2 > r) print("There is an error with the function. The circle extends from the center point at (xcenter, ycenter) out to r. If we choose an x value that is greater than our xcenter plus or minus our r then we are choosing a point that does not exist in the circle.")
+	if (any((abs(x) - abs(xcenter)) > r)) print("There is an error with the x - values that you are entering. The circle extends from the center point at (xcenter, ycenter) out to r. If we choose an x value that is greater than our xcenter plus or minus our radius then we are choosing a point that does not exist in the circle.")
 	y <- ycenter + (r^2 - (x - xcenter)^2)^0.5
 }
 
