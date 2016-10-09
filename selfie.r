@@ -27,10 +27,10 @@ for (i in 1:2){
 	lb <- xc - r
 	rb <- xc + r
 	xcoords <- c(seq(lb, rb, 0.01), rb)
-	for (j in c(1,-1)){
-		y <- j * circ(r = pi / 5, x = xcoords, xcenter = xc) + 1.5
-		lines(xcoords, y, col = "green4")
-	}
+	ytop <- circ(r = pi / 5, x = xcoords, xcenter = xc, ycenter = 1.5)
+	ybot <- circ(r = pi / 5, x = xcoords, xcenter = xc, ycenter = 1.5, half = "bottom")
+	lines(xcoords, ytop, col = "green4")
+	lines(xcoords, ybot, col = "green4")
 }
 
 # Create the nose
@@ -39,14 +39,22 @@ polygon(x = c(pi - .5, pi + .3, pi), y = c(0, 2/3, 0), col = "blue")
 # Create a full circle for the mouth
 xcenter <- pi
 r <- pi/5
-lb <- xcenter - r
-rb <- xcenter + r
-xcoords <- c(seq(lb, rb, 0.01), rb)
-ytop <- circ(r = r, x = xcoords, xcenter = xcenter) - 1
-ybot <- -1 * circ(r = r, x = xcoords, xcenter = xcenter) - 1
+xcoords <- c(seq(xcenter - r, xcenter + r, 0.01), xcenter + r)
+ytop <- circ(r = r, x = xcoords, xcenter = xcenter, ycenter = -1)
+ybot <- circ(r = r, x = xcoords, xcenter = xcenter, ycenter = -1, half = "bottom")
 polygon(x = c(xcoords, rev(xcoords)), y = c(ytop, ybot), col = "blue")
 
-# I want to set this up so that I can create an arbitrary amount of circles with specific coordinates,
-# radius and then be able to loop through the list and plot all the cirles. Sounds like fun!
-# 
-# I added this to test the RStudio integration with Git and GitHub
+# Plot an arbitrary amount of circles!---------
+n <- 8
+radii <- sample(1:4, n, TRUE)
+xc <- sample(sample(-2:2), n, TRUE)
+yc <- sample(sample(-2:2), n, TRUE)
+cols <- sample(colors(), n, FALSE)
+plot(-1000, 1000, xlim = c(-6, 6), ylim = c(-6, 6))
+for (i in 1:n){
+	xcoords <- c(seq(xc[i] - radii[i], xc[i] + radii[i], 0.01), xc[i] + radii[i])
+	ytop <- circ(r = radii[i], x = xcoords, xcenter = xc[i], ycenter = yc[i], half = "top")
+	ybottom <- circ(r = radii[i], x = xcoords, xcenter = xc[i], ycenter = yc[i], half = "bottom")
+	lines(xcoords, ytop, col = cols[i])
+	lines(xcoords, ybottom, col = cols[i])
+}
