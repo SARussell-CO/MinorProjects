@@ -4,7 +4,7 @@
 # The function that will perform Gauss-Jordan elimination (one column at a time).
 # The function has been modified so that it will reorder the matrix when necessary as
 # well as adjust itself when it finds a non-workable number.
-colsimp <- function(mat, row, column){
+GaussJordan <- function(mat, row, column){
   if (mat[row, column] == 0) 
     ({
     mat <- cbind(mat, 1)
@@ -37,7 +37,7 @@ Solution <- matrix(c(1, 0, 0, 1,
 
 # Reduce the matrix to reduced row echelon form
 for (i in 1:length(diag(mat))){
-  mat <- colsimp(mat, i, i)
+  mat <- GaussJordan(mat, i, i)
 }
 all.equal(mat, Solution) # TRUE
 mat; Solution
@@ -52,7 +52,7 @@ Solution <- matrix(c(1, 0, 0, 0, -0.5,
                      0, 0, 1, 0, 0.3,
                      0, 0, 0, 1, -0.4), 4, 5, TRUE)
 for (i in 1:length(diag(mat))){
-  mat <- colsimp(mat, i, i)
+  mat <- GaussJordan(mat, i, i)
 }
 all.equal(mat, Solution) # TRUE
 mat; Solution
@@ -66,7 +66,7 @@ Solution <- matrix(c(1, 0, -2, 0, -3, 7,
                      0, 0, 0, 1, -2, 0), 3, 6, TRUE)
 Solution # In reduced row echelon form (rref)
 for (i in 1:length(diag(mat))){
-  mat <- colsimp(mat, i, i)
+  mat <- GaussJordan(mat, i, i)
 }
 all.equal(mat, Solution) # TRUE
 mat; Solution
