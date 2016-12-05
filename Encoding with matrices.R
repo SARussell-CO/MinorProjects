@@ -75,3 +75,7 @@ codedMessage <- c(32, 34, 60, 19, 40, 24, 21, 67, 11, 69,
 									27, 44, 85, 16, 85, 29, 65, 82, 28, 82,
 									21, 66, 44, 41, 62, 8, 0, 16, 0, 8)
 decoder(codedMessage, encodingMatrix)
+d <- decoder(c(28, 22, 56, 11, 36, 30, 27, 75, 15, 78,
+							 30, 51, 64, 30, 62, 39, 30, 58, 25, 44), encodingMatrix)
+length(d) == length(unique(d)) # There are no repeated values
+d
