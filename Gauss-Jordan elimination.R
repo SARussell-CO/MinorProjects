@@ -70,3 +70,38 @@ for (i in 1:length(diag(mat))){
 }
 all.equal(mat, Solution) # TRUE
 mat; Solution
+
+# Now there comes a time where we want to reduce an n*n matrix so that we can find its inverse.
+mat <- matrix(c(1, -1, 1, 1, 0, 0,
+								0, 2, -1, 0, 1, 0,
+								2, 3, 0, 0, 0, 1), 3, 6, TRUE)
+Solution <- matrix(c(1, 0, 0, 3, 3, -1,
+										 0, 1, 0, -2, -2, 1,
+										 0, 0, 1, -4, -5, 2), 3, 6, TRUE)
+mat;Solution
+for (i in 1:length(diag(mat))){
+	mat <- GaussJordan(mat, i, i)
+}
+all.equal(mat, Solution) # TRUE
+mat; Solution
+
+# The function could be modified if we want to load a matrix to find its inverse. I will
+# not do this as R already can easily find matrix inverse if they exist.
+mat <- matrix(c(1, -1, 1,
+								0, 2, -1,
+								2, 3, 0), 3, 3, TRUE)
+solve(mat) # This is the inverse to mat
+
+# One more time finding the matrix inverse
+mat <- matrix(c(3, -1, 1, 1, 0, 0,
+								-1, 1, 0, 0, 1, 0,
+								1, 0, 1, 0, 0, 1), 3, 6, TRUE)
+mat
+for (i in 1:length(diag(mat))){
+	mat <- GaussJordan(mat, i, i)
+}
+
+mat
+matinv <- mat[,(nrow(mat) + 1):(nrow(mat)*2)]
+matinv
+round(mat[, 1:3] %*% matinv)
