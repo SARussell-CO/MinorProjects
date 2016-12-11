@@ -101,8 +101,8 @@ changer <- function(mat, choice){
 }
 
 # Iterate over the matrix until complete
-solver <- function(mat, choice = 1, minimize = TRUE){
-  if(minimize == FALSE){
+solver <- function(mat, choice = 1, maximize = TRUE, stack = FALSE){
+  if(maximize == FALSE){
     mat <- t(mat)
     mat[nrow(mat), 1:(ncol(mat) - 1)] <- mat[nrow(mat), 1:(ncol(mat) - 1)] * -1
     mat[nrow(mat), ncol(mat)] <- 0
@@ -122,9 +122,22 @@ solver <- function(mat, choice = 1, minimize = TRUE){
       return(mat)
     }
   }
-  mat <- add_identity(mat)
+  if (stack == FALSE) {
+    output <- vector("list", 3)
+    names(output) <- c("Matrix", "Solutions", "Errors")
+  } else {
+    output <- vector("list", 4)
+    names(output) <- c("Matrix", "Solutions", "Errors", "Stack")
+    stacked <- vector("list", 20)
+    i <- 1
+    stacked[[i]] <- rbind(mat, rep(NA, ncol(mat)))
+  }
   repeat{
     mat <- changer(mat, choice)
+    if (stack == TRUE) {
+      i <- i + 1
+      stacked[[i]] <- rbind(mat, rep(NA, ncol(mat)))
+    }
     l <- chooser(mat)
     if (sum(l$error) > 0) {
       if (l$error["No negatives/Completion"] == TRUE) {
@@ -143,15 +156,21 @@ solver <- function(mat, choice = 1, minimize = TRUE){
     if (is.null(l$row)) break
     if (is.null(l$column)) break
   }
-	output <- vector("list", 3)
-	names(output) <- c("Matrix", "Solutions", "Errors")
   output$Matrix <- mat
-  if (minimize == TRUE) {
+  if (maximize == TRUE) {
     output$Solutions <- paste(rownames(mat), "=", mat[, ncol(mat)])
   } else {
-    output$Solutions <- "Interpret matrix"
+    output$Solutions <- vector("list", 2)
+    output$Solutions[[1]] <- "Interpret matrix with care"
+    xx <- output$Matrix[nrow(output$Matrix), !(colnames(output$Matrix) %in% c(paste0("X", 1:20), "P"))]
+    names(xx) <- c(paste0("X", 1:(length(xx) - 1)), "Minimum value")
+    output$Solutions[[2]] <- xx
   }
   if (l$error[3] == 1) output$Solutions <- "There are no solutions to this system"
   output$Errors <- chooser(mat)$error
+  if (stack == TRUE) {
+    output$Stack <- do.call(rbind, stacked)
+  }
   output
 }
+
